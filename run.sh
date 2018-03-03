@@ -9,9 +9,7 @@ fi
 i=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
 h=$(hostname)
 
-echo "$h ansible_host=$i" >> /home/pi/ansible.log
+echo "$i  ansible_connection=ssh ansible_ssh_user=pi ansible_ssh_pass="$1 >> ~/aquarium/hosts
 
-echo "$i  ansible_connection=ssh ansible_ssh_user=pi ansible_ssh_pass="$1 >> ~/ansible/hosts
-
-ansible-playbook main.yml >> /home/pi/ansible.log
+ansible-playbook main.yml
 

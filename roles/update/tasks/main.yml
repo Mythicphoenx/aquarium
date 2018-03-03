@@ -1,0 +1,21 @@
+---
+- name: echo 'hello world'
+  command: echo "Hello {{ world }}"
+  register: result
+
+- name: print message
+  debug:
+    msg: "{{ result.stdout_lines }}"
+
+- name: Update apt-get cache
+  apt: >
+    update_cache=yes
+    cache_valid_time=360
+    
+- name: Update all packages to the latest version
+  apt: > 
+    upgrade=yes
+
+- name: set timezone to Europe/Amsterdam
+  timezone:
+    name: Europe/Amsterdam
