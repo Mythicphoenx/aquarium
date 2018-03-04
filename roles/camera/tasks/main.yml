@@ -12,16 +12,16 @@
   command: npm init
   args:
     chdir: /home/pi/node_programs/liveStreaming
+    creates: /home/pi/node_programs/liveStreaming1
 
 - name: New node project
   command: npm install express socket.io --save
   args:
     chdir: /home/pi/node_programs/liveStreaming
+    creates: /home/pi/node_programs/liveStreaming1
 
 - copy:
     src: ../files/index.js
-    dest: /home/pi/node_programs/liveStreaming
-    owner: foo
-    group: foo
-    mode: 0644
+    dest: /home/pi/node_programs/liveStreaming/index.js
+    mode: 0755
 

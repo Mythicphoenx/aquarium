@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ $# -ne 1 ]; then
-    echo $0: usage: ./install.sh  password
+    echo $0: usage: ./run.sh  password
     exit 0
 fi
 
@@ -13,5 +13,5 @@ echo "$i  ansible_connection=ssh ansible_ssh_user=pi ansible_ssh_pass="$1 >> ~/a
 
 ansible-playbook main.yml
 
-rm /home/pi/aquarium/hosts 1>/dev/null
-rm /home/pi/aquarium/main.retry 1>/dev/null
+rm /home/pi/aquarium/hosts 2>/dev/null
+rm /home/pi/aquarium/main.retry 2>/dev/null
