@@ -1,4 +1,6 @@
 ---
 - hosts: all
   roles:
-  - install
+  - update
+  - node.js
+  - ngrok 

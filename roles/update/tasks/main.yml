@@ -10,12 +10,17 @@
 - name: Update apt-get cache
   apt: >
     update_cache=yes
-    cache_valid_time=360
+  become: true
+  become_user: root
     
 - name: Update all packages to the latest version
   apt: > 
     upgrade=yes
+  become: true
+  become_user: root
 
 - name: set timezone to Europe/Amsterdam
   timezone:
     name: Europe/Amsterdam
+  become: true
+  become_user: root

@@ -13,3 +13,4 @@ echo "$i  ansible_connection=ssh ansible_ssh_user=pi ansible_ssh_pass="$1 >> ~/a
 
 ansible-playbook main.yml
 
+rm ~/aquarium/hosts
