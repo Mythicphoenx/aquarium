@@ -1,0 +1,75 @@
+- name: Update apt-get cache
+  apt: >
+    update_cache=yes
+     cache_valid_time=360
+  
+- name: Update all packages to the latest version
+  apt: > 
+    upgrade=yes
+
+- name: install apt packages
+  apt: 
+    deb="{{item}}"
+    state: installed
+  with_items:
+    - python-pip
+        name: picamera
+        name: build-essential
+        name: cmake 
+        name: pkg-config
+        name: libjpeg-dev
+        name: libtiff5-dev
+        name: libjasper-dev
+        name: libpng12-dev
+        name: libavcodec-dev
+        name: libavcodec-dev
+        name: libswscale-dev
+        name: libv4l-dev
+        name: libxvidcore-dev
+    - name: install "libx264-dev" package
+      apt:
+        name: libx264-dev
+    - name: install "libgtk2.0-dev" package
+      apt:
+        name: libgtk2.0-dev
+    - name: install "libatlas-base-dev" package
+      apt:
+        name: libatlas-base-dev
+    - name: install "gfortran" package
+      apt:
+        name: gfortran
+    - name: install "python2.7-dev" package
+      apt:
+        name: python2.7-dev
+    - name: install "python3-dev" package
+      apt:
+        name: python3-dev
+
+    - name: download file opencv.zip
+      get_url:
+        url: https://github.com/Itseez/opencv/archive/3.1.0.zip
+        dest: /home/pi/ansible-camera/opencv.zip
+    - name: unarchive opencv.zip
+      unarchive:
+       src: /home/pi/ansible-camera/opencv.zip
+       dest: /home/pi/
+       remote_src: True
+
+    - name: download file opencv_contrib.zip
+      get_url:
+        url: https://github.com/Itseez/opencv_contrib/archive/3.1.0.zip
+        dest: /home/pi/ansible-camera/opencv_contrib.zip
+    - name: Unarchive opencv_contrib.zip
+      unarchive:
+       src: /home/pi/ansible-camera/opencv_contrib.zip
+       dest: /home/pi/
+       remote_src: True
+
+    - name: download file get-pip.py 
+      get_url:
+        url: https://bootstrap.pypa.io/get-pip.py
+        dest: /home/pi/get-pip.py
+    - name: Run get-pip.py
+      command: /home/pi/get-pip.py
+      args:
+        chdir: /home/pi/    
