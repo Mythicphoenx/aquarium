@@ -1,6 +1,6 @@
 ---
 - hosts: all
   roles:
-#  - update
+  - update
   - node.js
   - camera 

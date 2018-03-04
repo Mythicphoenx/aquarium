@@ -1,0 +1,27 @@
+- name: enable camera
+  command: raspi-config nonint do_camera 0
+  become: true
+  become_user: root
+
+- file:
+    path: /home/pi/node_programs/liveStreaming
+    state: directory
+    mode: 0755
+
+- name: New node project
+  command: npm init
+  args:
+    chdir: /home/pi/node_programs/liveStreaming
+
+- name: New node project
+  command: npm install express socket.io --save
+  args:
+    chdir: /home/pi/node_programs/liveStreaming
+
+- copy:
+    src: ../files/index.js
+    dest: /home/pi/node_programs/liveStreaming
+    owner: foo
+    group: foo
+    mode: 0644
+

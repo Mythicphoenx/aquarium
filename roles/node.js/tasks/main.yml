@@ -1,19 +1,55 @@
-- name: Install the gpg key for nodejs LTS
-  apt_key:
-    url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
-    state: present
-
-- name: Install the nodejs LTS repos
-  apt_repository:
-    repo: "deb https://deb.nodesource.com/node_6.x {{ ansible_distribution_release }} main"
-    state: present
-    update_cache: yes
+- name: Unarchive node.js
+  unarchive:
+    src: https://nodejs.org/dist/v6.2.1/node-v6.2.1-linux-armv6l.tar.gz
+    dest: /home/pi
+    remote_src: yes
   become: true
   become_user: root
 
-- name: Install the nodejs
-  apt:
-    name: nodejs
-    state: present
+- name: copy node file
+  copy:
+    src: /home/pi/node-v6.2.1-linux-armv6l/bin/node
+    dest: /usr/local/bin
+    mode: 0644
   become: true
   become_user: root
+
+- name: copy npm file
+  copy:
+    src: /home/pi/node-v6.2.1-linux-armv6l/bin/npm
+    dest: /usr/local/bin
+    mode: 0644
+  become: true
+  become_user: root
+
+- name: Checks if the environment file already has an entry for the PATH
+  replace:
+    dest=/etc/environment
+    regexp="PATH=(.*)"
+    replace="PATH=\1"
+  register: checkIfPATHIsHere
+  become: true
+  become_user: root
+
+- name: Add a PATH entry with /usr/local/bin if the PATH is not already defined
+  lineinfile:
+    dest=/etc/environment
+    state=present
+    line="PATH=/usr/local/bin"
+    regexp=''
+    insertafter=EOF
+  when: checkIfPATHIsHere.changed == false
+  become: true
+  become_user: root
+
+- name: add /usr/local/bin to the PATH 
+  lineinfile:
+    dest=/etc/environment
+    state=present
+    backrefs=no
+    regexp="PATH=(["])((?!.?{{/usr/local/bin}}).?)(["])$"
+    line="PATH=\1\2:{{/usr/local/bin}}\3" 
+  when: checkIfPATHIsHere.changed
+  become: true
+  become_user: root
+
