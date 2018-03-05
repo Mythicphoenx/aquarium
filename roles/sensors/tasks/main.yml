@@ -30,52 +30,67 @@
   become: true
   become_user: root
 
+- name: mkdir root/sensor
+  file:
+    path: /home/pi/node_programs/root/sensor
+    state: directory
+    mode: 0755
+
 - name: Copy dht.py
   copy:
     src: ../files/dht.py
-    dest: /home/pi/dht.py
+    dest: /home/pi/node_programs/root/sensor/dht.py
     mode: 0755
 
-- name: Test temperature
-  shell: python /home/pi/dht.py
+- name: npm install
+  command: npm install --save
   args:
-    chdir: /home/pi/
-  register: result
-
-- name: print message
-  debug:
-    msg: "{{ result.stdout_lines }}"
-
-- name: Install node-dht-sensor node.js package.
-  npm:
-    name="{{item}}"
-  with_items:
-  - node-dht-sensor
-  - request
+    chdir: /home/pi/node_programs/root/sensor/
+    creates: /home/pi/node_programs/root/sensor/node_modules
   become: true
   become_user: root
 
-- name: mkdir sensor
-  file:
-    path: /home/pi/node_programs/sensor
-    state: directory
-    mode: 0755
+- name: install npm node-dht-sensor request --save
+  command: npm install node-dht-sensor request --save
+  args:
+    chdir: /home/pi/node_programs/root/sensor/
+    creates: /home/pi/node_programs/root/sensor/node_modules/node-dht-sensor
+  become: true
+  become_user: root
 
 - name: New node project
   copy:
     src: ../files/package.json
-    dest: /home/pi/node_programs/sensor/package.json
+    dest: /home/pi/node_programs/root/sensor/package.json
     mode: 0755
 
-- name: Copy server.js
+- name: Copy index.js
   copy:
-    src: ../files/server.js
-    dest: /home/pi/node_programs/sensor/server.js
+    src: ../files/index.js
+    dest: /home/pi/node_programs/root/sensor/index.js
     mode: 0755
 
-- name: Copy server.html
+- name: Copy index.html
   copy:
-    src: ../files/server.html
-    dest: /home/pi/node_programs/sensor/server.js
+    src: ../files/index.html
+    dest: /home/pi/node_programs/root/sensor/index.js
     mode: 0755
 
+- name: Check if port 8080 is listening
+  wait_for:
+    port: 8080
+    delay: 5
+    timeout: 10
+    msg: "Timeout waiting for 8080 to respond"
+  register: port_check
+  ignore_errors: yes
+
+- name: start Node
+  shell: nodejs index.js
+  args:
+    chdir: /home/pi/node_programs/root/sensor
+  async: 1000
+  poll: 0
+  when: port_check.failed == true
+  become: true
+  become_user: root

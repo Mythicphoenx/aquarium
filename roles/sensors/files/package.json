@@ -1,0 +1,15 @@
+{
+  "name": "temperature",
+  "version": "0.0.1",
+  "description": "temperature application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sander Revenberg",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  }
+}

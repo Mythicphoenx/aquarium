@@ -16,18 +16,15 @@
   become: true
   become_user: root
 
-- name: Install pm2 package
-  npm:
-    name="{{item}}"
-    global=yes
-  with_items:
-  - pm2
-  become: true
-  become_user: root
-
-- name: mkdir liveStreaming
+- name: mkdir node_programs
   file:
     path: /home/pi/node_programs
+    state: directory
+    mode: 0755
+
+- name: mkdir node_programs/root
+  file:
+    path: /home/pi/node_programs/root
     state: directory
     mode: 0755
 
@@ -43,6 +40,20 @@
     dest: /home/pi/node_programs/app.js
     mode: 0755
 
+- name: Copy manager.js
+  copy:
+    src: ../files/manager.js
+    dest: /home/pi/node_programs/root/manager.js
+    mode: 0755
+
+- name: install npm manager --save
+  command: npm install manager pm2 -g --save
+  args:
+    chdir: /home/pi/node_programs
+    creates: /home/pi/node_programs/node_modules
+  become: true
+  become_user: root
+
 - name: Check if port 3000 is listening
   wait_for:
     port: 3000
@@ -53,9 +64,9 @@
   ignore_errors: yes
 
 - name: start Node
-  shell: pm2 start app.js
+  shell: nodejs app.js
   args:
-    chdir: /home/pi/node_programs/liveStreaming/
+    chdir: /home/pi/node_programs/
   async: 1000
   poll: 0
   when: port_check.failed == true
