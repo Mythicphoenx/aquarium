@@ -15,3 +15,48 @@
   - node-semver
   become: true
   become_user: root
+
+- name: Install pm2 package
+  npm:
+    name="{{item}}"
+    global=yes
+  with_items:
+  - pm2
+  become: true
+  become_user: root
+
+- name: mkdir liveStreaming
+  file:
+    path: /home/pi/node_programs
+    state: directory
+    mode: 0755
+
+- name: New node project
+  copy:
+    src: ../files/package.json
+    dest: /home/pi/node_programs/package.json
+    mode: 0755
+
+- name: Copy app.js
+  copy:
+    src: ../files/app.js
+    dest: /home/pi/node_programs/app.js
+    mode: 0755
+
+- name: Check if port 3000 is listening
+  wait_for:
+    port: 3000
+    delay: 5
+    timeout: 10
+    msg: "Timeout waiting for 3000 to respond"
+  register: port_check
+  ignore_errors: yes
+
+- name: start Node
+  shell: pm2 start app.js
+  args:
+    chdir: /home/pi/node_programs/liveStreaming/
+  async: 1000
+  poll: 0
+  when: port_check.failed == true
+

@@ -33,20 +33,4 @@
     chdir: /home/pi/node_programs/liveStreaming
     creates: /home/pi/node_programs/liveStreaming/node_modules
 
-- name: Check if port 3000 is listening
-  wait_for:
-    port: 3000
-    delay: 5
-    timeout: 10
-    msg: "Timeout waiting for 3000 to respond"
-  register: port_check
-  ignore_errors: yes
-
-- name: start Node
-  shell: nodejs index.js
-  args:
-    chdir: /home/pi/node_programs/liveStreaming/
-  async: 1000
-  poll: 0
-  when: port_check.failed == true
   

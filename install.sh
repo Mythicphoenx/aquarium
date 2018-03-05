@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "run: sudo rpi-update"
 if [ $# -ne 1 ]; then
     echo $0: usage: ./install.sh  password
     exit 0

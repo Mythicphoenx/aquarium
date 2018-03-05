@@ -45,3 +45,37 @@
 - name: print message
   debug:
     msg: "{{ result.stdout_lines }}"
+
+- name: Install node-dht-sensor node.js package.
+  npm:
+    name="{{item}}"
+  with_items:
+  - node-dht-sensor
+  - request
+  become: true
+  become_user: root
+
+- name: mkdir sensor
+  file:
+    path: /home/pi/node_programs/sensor
+    state: directory
+    mode: 0755
+
+- name: New node project
+  copy:
+    src: ../files/package.json
+    dest: /home/pi/node_programs/sensor/package.json
+    mode: 0755
+
+- name: Copy server.js
+  copy:
+    src: ../files/server.js
+    dest: /home/pi/node_programs/sensor/server.js
+    mode: 0755
+
+- name: Copy server.html
+  copy:
+    src: ../files/server.html
+    dest: /home/pi/node_programs/sensor/server.js
+    mode: 0755
+
