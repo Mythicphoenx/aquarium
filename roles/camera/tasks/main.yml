@@ -9,19 +9,43 @@
     mode: 0755
 
 - name: New node project
-  command: npm init
-  args:
-    chdir: /home/pi/node_programs/liveStreaming
-    creates: /home/pi/node_programs/liveStreaming1
+  copy:
+    src: ../files/package.json
+    dest: /home/pi/node_programs/liveStreaming/package.json
+    mode: 0755
 
-- name: New node project
-  command: npm install express socket.io --save
-  args:
-    chdir: /home/pi/node_programs/liveStreaming
-    creates: /home/pi/node_programs/liveStreaming1
-
-- copy:
+- name: Copy index.js
+  copy:
     src: ../files/index.js
     dest: /home/pi/node_programs/liveStreaming/index.js
     mode: 0755
 
+- name: Copy index.html
+  copy:
+    src: ../files/index.html
+    dest: /home/pi/node_programs/liveStreaming/index.html
+    mode: 0755
+
+- name: install express socket.io --save
+  command: npm install express socket.io --save
+  args:
+    chdir: /home/pi/node_programs/liveStreaming
+    creates: /home/pi/node_programs/liveStreaming/node_modules
+
+- name: Check if port 3000 is listening
+  wait_for:
+    port: 3000
+    delay: 5
+    timeout: 10
+    msg: "Timeout waiting for 3000 to respond"
+  register: port_check
+  ignore_errors: yes
+
+- name: start Node
+  shell: nodejs index.js
+  args:
+    chdir: /home/pi/node_programs/liveStreaming/
+  async: 1000
+  poll: 0
+  when: port_check.failed == true
+  

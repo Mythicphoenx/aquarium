@@ -1,24 +1,17 @@
-- name: Unarchive node.js
-  unarchive:
-    src: https://nodejs.org/dist/v6.2.1/node-v6.2.1-linux-armv6l.tar.gz
-    dest: /home/pi
-    remote_src: yes
+- name: Update apt-get cache
+  apt: >
+    update_cache=yes
   become: true
   become_user: root
 
-- name: copy node file
-  copy:
-    src: /home/pi/node-v6.2.1-linux-armv6l/bin/node
-    dest: /usr/bin
-    mode: 0755
+- name: install packages
+  apt: 
+    name="{{item}}" 
+    update_cache=yes 
+    state=latest
+  with_items:
+  - nodejs 
+  - npm 
+  - node-semver
   become: true
   become_user: root
-
-- name: copy npm file
-  copy:
-    src: /home/pi/node-v6.2.1-linux-armv6l/bin/npm
-    dest: /usr/bin
-    mode: 0755
-  become: true
-  become_user: root
-
