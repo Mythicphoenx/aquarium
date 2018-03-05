@@ -3,7 +3,8 @@
   become: true
   become_user: root
 
-- file:
+- name: mkdir liveStreaming
+  file:
     path: /home/pi/node_programs/liveStreaming
     state: directory
     mode: 0755
