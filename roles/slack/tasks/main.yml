@@ -1,0 +1,89 @@
+---
+- name: Update apt-get cache
+  apt: >
+    update_cache=yes
+    cache_valid_time=3600
+  become: true
+  become_user: root
+
+- name: install packages
+  apt:
+    name="{{item}}"
+    update_cache=yes
+    state=latest
+  with_items:
+  - pip
+  become: true
+  become_user: root
+
+- name: install pip packages
+  pip:
+    name="{{item}}"    
+  with_items:
+  - psutil
+  become: true
+  become_user: root
+
+- name: mkdir root/slack
+  file:
+    path: /home/pi/node_programs/root/slack
+    state: directory
+    mode: 0755
+
+- name: Copy slack.py
+  copy:
+    src: ../files/slack.py
+    dest: /home/pi/node_programs/root/slack/slack.py
+    mode: 0755
+
+- name: New node project
+  copy:
+    src: ../files/package.json
+    dest: /home/pi/node_programs/root/slack/package.json
+    mode: 0755
+
+- name: npm install forever
+  command: npm install forever -g
+  args:
+    chdir: /home/pi/node_programs/root/
+    creates: /usr/local/lib/node_modules/forever
+  become: true
+  become_user: root
+
+- name: npm install
+  command: npm install --save
+  args:
+    chdir: /home/pi/node_programs/root/slack/
+    creates: /home/pi/node_programs/root/slack/node_modules
+
+- name: Copy index.js
+  copy:
+    src: ../files/index.js
+    dest: /home/pi/node_programs/root/slack/index.js
+    mode: 0755
+
+- name: Copy index.html
+  copy:
+    src: ../files/index.html
+    dest: /home/pi/node_programs/root/slack/index.html
+    mode: 0755
+
+- name: Check if port 8081 is listening
+  wait_for:
+    port: 8081
+    delay: 5
+    timeout: 10
+    msg: "Timeout waiting for 8081 to respond"
+  register: port_check
+  ignore_errors: yes
+
+- name: start Node
+  shell: "forever start /home/pi/node_programs/root/slack/index.js"
+  args:
+    chdir: /home/pi/node_programs/root/slack
+  async: 1000
+  poll: 0
+  when: port_check.failed == true
+  become: true
+  become_user: root
+

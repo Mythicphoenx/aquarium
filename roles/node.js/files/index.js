@@ -8,7 +8,7 @@ function getInfo(filename) {
   var title = filename.split("/")
   myInfo.title = title[title.length - 2];
 
-  var data = fs.readFileSync(path.join(__dirname,filename), {encoding: 'utf-8'})
+  var data = fs.readFileSync(filename, {encoding: 'utf-8'})
   var n1 = data.indexOf('.listen(') + 8;
   var n2 = data.indexOf(',', n1);
   port = data.substr(n1, n2 - n1 )
@@ -51,13 +51,12 @@ var app = express();
 var data = { };
 data.title = "MyNodes";
 
-  if (module.parent == undefined) { 
-    data = dirTree('root', data);
+  if (module.parent == undefined) {
+    data = dirTree('/home/pi/node_programs/root', data);
   }
-  data.body = process.argv[2];
 
 app.get('/', function (req, res) {
-  app.use('/', express.static(path.join(__dirname, 'root')));
+  app.use('/', express.static('/home/pi/node_programs/root'));
   data.host = res.req.headers.host.split(":")[0]
 
   fs.readFile('index.html', 'utf-8', function(error, source){

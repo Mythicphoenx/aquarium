@@ -15,17 +15,29 @@
     dest: /home/pi/node_programs/root/camera/package.json
     mode: 0755
 
-- name: install express --save
-  command: npm install express --save
+- name: npm install forever
+  command: npm install forever -g
+  args:
+    chdir: /home/pi/node_programs/root/
+    creates: /usr/local/lib/node_modules/forever
+  become: true
+  become_user: root
+
+- name: install express --save 
+  command: npm install express --save -g
   args:
     chdir: /home/pi/node_programs/root/camera/
     creates: /home/pi/node_programs/root/camera/node_modules/express
+  become: true
+  become_user: root
 
-- name: install socket.io --save
-  command: npm install socket.io --save
+- name: install socket.io --save 
+  command: npm install socket.io --save -g
   args:
     chdir: /home/pi/node_programs/root/camera/
     creates: /home/pi/node_programs/root/camera/node_modules//socket.io
+  become: true
+  become_user: root
 
 - name: Copy index.js
   copy:

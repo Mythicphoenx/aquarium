@@ -79,11 +79,19 @@
     chdir: /home/pi/node_programs/root/sensor/
     creates: /home/pi/node_programs/root/sensor/node_modules
 
+- name: npm install forever
+  command: npm install forever -g
+  args:
+    chdir: /home/pi/node_programs/root/
+    creates: /usr/local/lib/node_modules/forever
+  become: true
+  become_user: root
+
 - name: npm install node-dht-sensor request --save -g
   command: npm install node-dht-sensor request --save
   args:
     chdir: /home/pi/node_programs/root/sensor/
-    creates: /usr/local/lib/node_modules/forever/node-dht-sensor
+    creates: /usr/local/lib/node_modules/node-dht-sensor
   become: true
   become_user: root
 
