@@ -15,11 +15,17 @@
     dest: /home/pi/node_programs/root/camera/package.json
     mode: 0755
 
-- name: install express socket.io --save
-  command: npm install express socket.io --save
+- name: install express --save
+  command: npm install express --save
   args:
     chdir: /home/pi/node_programs/root/camera/
-    creates: /home/pi/node_programs/camera/node_modules
+    creates: /home/pi/node_programs/root/camera/node_modules/express
+
+- name: install socket.io --save
+  command: npm install socket.io --save
+  args:
+    chdir: /home/pi/node_programs/root/camera/
+    creates: /home/pi/node_programs/root/camera/node_modules//socket.io
 
 - name: Copy index.js
   copy:
@@ -48,8 +54,8 @@
   register: port_check
   ignore_errors: yes
 
-- name: start Node
-  shell: forever start /home/pi/node_programs/root/camera/index.js
+- name: start Camera
+  shell: "forever start /home/pi/node_programs/root/camera/index.js"
   args:
     chdir: /home/pi/node_programs/root/camera
   async: 1000

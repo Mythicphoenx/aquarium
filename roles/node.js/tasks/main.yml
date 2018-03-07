@@ -5,7 +5,7 @@
   become_user: root
 
 - name: ln node to nodejs
-  command: ln -s "$(which nodejs)" /usr/bin/node
+  command: 'ln -s "$(which nodejs)" /usr/bin/node'
   args:
     creates: /usr/bin/node
   become: true
@@ -58,6 +58,8 @@
   args:
     chdir: /home/pi/node_programs/root/
     creates: /usr/local/lib/node_modules/forever
+  become: true
+  become_user: root
 
 - name: npm install handlebars
   command: npm install handlebars -save
@@ -75,7 +77,7 @@
   ignore_errors: yes
 
 - name: start Node
-  shell: forever start /home/pi/node_programs/index.js
+  shell: "forever start /home/pi/node_programs/index.js"
   args:
     chdir: /home/pi/node_programs/
   async: 1000

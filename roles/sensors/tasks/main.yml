@@ -55,7 +55,7 @@
   become: true
   become_user: root
 
-- name: mkdir root/sensor
+- name: mkdir root/sensor/data
   file:
     path: /home/pi/node_programs/root/sensor
     state: directory
