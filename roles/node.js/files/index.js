@@ -67,12 +67,10 @@ app.get('/', function (req, res) {
 
     var template = handlebars.compile(source);
     var html = template(data);
-    console.log(html)
-//  });
 
   res.send(html)
   })
 });
-app.listen(8081, function () {
-  console.log('Index app listening on port 8081!');
+app.listen(80, function () {
+  console.log('Index app listening on port 80!');
 });

@@ -3,61 +3,55 @@
   become: true
   become_user: root
 
-- name: mkdir root/liveStreaming
+- name: mkdir root/camera/stream
   file:
-    path: /home/pi/node_programs/root/liveStreaming
-    state: directory
-    mode: 0755
-
-- name: mkdir root/liveStreaming/stream
-  file:
-    path: /home/pi/node_programs/root/liveStreaming/stream
+    path: /home/pi/node_programs/root/camera/stream
     state: directory
     mode: 0755
 
 - name: New node project
   copy:
     src: ../files/package.json
-    dest: /home/pi/node_programs/root/liveStreaming/package.json
+    dest: /home/pi/node_programs/root/camera/package.json
     mode: 0755
 
 - name: install express socket.io --save
   command: npm install express socket.io --save
   args:
-    chdir: /home/pi/node_programs/root/liveStreaming/
-    creates: /home/pi/node_programs/liveStreaming/node_modules
+    chdir: /home/pi/node_programs/root/camera/
+    creates: /home/pi/node_programs/camera/node_modules
 
 - name: Copy index.js
   copy:
     src: ../files/index.js
-    dest: /home/pi/node_programs/root/liveStreaming/index.js
+    dest: /home/pi/node_programs/root/camera/index.js
     mode: 0755
 
 - name: Copy index.html
   copy:
     src: ../files/index.html
-    dest: /home/pi/node_programs/root/liveStreaming/index.html
+    dest: /home/pi/node_programs/root/camera/index.html
     mode: 0755
 
 - name: npm install
   command: npm install --save
   args:
-    chdir: /home/pi/node_programs/root/liveStreaming
-    creates: /home/pi/node_programs/root/liveStreaming/node_modules
+    chdir: /home/pi/node_programs/root/camera
+    creates: /home/pi/node_programs/root/camera/node_modules
 
-- name: Check if liveStreaming is running
+- name: Check if camera is running
   wait_for:
     port: 3000
     delay: 5
     timeout: 10
-    msg: "Timeout waiting for liveStreaming to respond"
+    msg: "Timeout waiting for camera to respond"
   register: port_check
   ignore_errors: yes
 
 - name: start Node
-  shell: "forever start /home/pi/node_programs/root/liveStreaming/index.js"
+  shell: forever start /home/pi/node_programs/root/camera/index.js
   args:
-    chdir: /home/pi/node_programs/root/liveStreaming
+    chdir: /home/pi/node_programs/root/camera
   async: 1000
   poll: 0
   when: port_check.failed == true

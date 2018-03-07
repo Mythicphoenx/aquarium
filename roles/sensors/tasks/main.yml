@@ -84,6 +84,8 @@
   args:
     chdir: /home/pi/node_programs/root/sensor/
     creates: /usr/local/lib/node_modules/forever/node-dht-sensor
+  become: true
+  become_user: root
 
 - name: Copy index.js
   copy:
@@ -94,7 +96,7 @@
 - name: Copy index.html
   copy:
     src: ../files/index.html
-    dest: /home/pi/node_programs/root/sensor/index.js
+    dest: /home/pi/node_programs/root/sensor/index.html
     mode: 0755
 
 - name: Check if port 8080 is listening
