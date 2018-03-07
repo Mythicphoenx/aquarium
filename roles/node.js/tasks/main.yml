@@ -4,6 +4,13 @@
   become: true
   become_user: root
 
+- name: ln node to nodejs
+  command: ln -s "$(which nodejs)" /usr/bin/node
+  args:
+    creates: /usr/bin/node
+  become: true
+  become_user: root
+
 - name: install packages
   apt: 
     name="{{item}}" 
@@ -15,12 +22,6 @@
   - node-semver
   become: true
   become_user: root
-
-- name: mkdir node_programs
-  file:
-    path: /home/pi/node_programs
-    state: directory
-    mode: 0755
 
 - name: mkdir node_programs/root
   file:
@@ -34,40 +35,51 @@
     dest: /home/pi/node_programs/package.json
     mode: 0755
 
-- name: Copy app.js
+- name: Copy index.js
   copy:
-    src: ../files/app.js
-    dest: /home/pi/node_programs/app.js
+    src: ../files/index.js
+    dest: /home/pi/node_programs/index.js
     mode: 0755
 
-- name: Copy manager.js
+- name: Copy index.html
   copy:
-    src: ../files/manager.js
-    dest: /home/pi/node_programs/root/manager.js
+    src: ../files/index.html
+    dest: /home/pi/node_programs/index.html
     mode: 0755
 
-- name: install npm manager --save
-  command: npm install manager pm2 -g --save
+- name: npm install
+  command: npm install --save
   args:
-    chdir: /home/pi/node_programs
-    creates: /home/pi/node_programs/node_modules
-  become: true
-  become_user: root
+    chdir: /home/pi/node_programs/root/
+    creates: /home/pi/node_programs/root/node_modules
 
-- name: Check if port 3000 is listening
+- name: npm install forever
+  command: npm install forever -g 
+  args:
+    chdir: /home/pi/node_programs/root/
+    creates: /usr/local/lib/node_modules/forever
+
+- name: npm install handlebars
+  command: npm install handlebars -g
+  args:
+    chdir: /home/pi/node_programs/root/
+    creates: /usr/local/lib/node_modules/handlebars
+
+- name: Check if node is running
   wait_for:
-    port: 3000
+    port: 8080
     delay: 5
     timeout: 10
-    msg: "Timeout waiting for 3000 to respond"
+    msg: "Timeout waiting for liveStreaming to respond"
   register: port_check
   ignore_errors: yes
 
 - name: start Node
-  shell: nodejs app.js
+  shell: "forever start /home/pi/node_programs/index.js"
   args:
     chdir: /home/pi/node_programs/
   async: 1000
   poll: 0
   when: port_check.failed == true
-
+  become: true
+  become_user: root

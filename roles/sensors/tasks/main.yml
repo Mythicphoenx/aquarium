@@ -17,9 +17,34 @@
   become: true
   become_user: root
 
+- name: Extract bcm2835-1.55.tar.gz
+  unarchive:
+    src: ../files/bcm2835-1.55.tar.gz
+    dest: /home/pi
+
+- name: install bcm2835 configure
+  command: ./configure
+  args:
+    chdir: /home/pi/bcm2835-1.55
+    creates: /home/pi/src/Makefile
+
+- name: install bcm2835 make
+  command: make
+  args:
+    chdir: /home/pi/bcm2835-1.55
+    creates: /home/pi/src/bcm2835.o
+
+- name: install bcm2835 make install
+  command: make install
+  args:
+    chdir: /home/pi/bcm2835-1.55
+    creates: /usr/local/lib/libbcm2835.a
+  become: true
+  become_user: root
+
 - name: Extract Adafruit_Python_DHT.tar.gz
   unarchive:
-    src: Adafruit_Python_DHT.tar.gz
+    src: ../files/Adafruit_Python_DHT.tar.gz
     dest: /home/pi
 
 - name: install Adafruit_Python_DHT
@@ -53,16 +78,12 @@
   args:
     chdir: /home/pi/node_programs/root/sensor/
     creates: /home/pi/node_programs/root/sensor/node_modules
-  become: true
-  become_user: root
 
-- name: install npm node-dht-sensor request --save
+- name: npm install node-dht-sensor request --save -g
   command: npm install node-dht-sensor request --save
   args:
     chdir: /home/pi/node_programs/root/sensor/
-    creates: /home/pi/node_programs/root/sensor/node_modules/node-dht-sensor
-  become: true
-  become_user: root
+    creates: /usr/local/lib/node_modules/forever/node-dht-sensor
 
 - name: Copy index.js
   copy:
@@ -86,7 +107,7 @@
   ignore_errors: yes
 
 - name: start Node
-  shell: nodejs index.js
+  shell: "forever start /home/pi/node_programs/root/sensor/index.js"
   args:
     chdir: /home/pi/node_programs/root/sensor
   async: 1000
@@ -94,3 +115,4 @@
   when: port_check.failed == true
   become: true
   become_user: root
+
