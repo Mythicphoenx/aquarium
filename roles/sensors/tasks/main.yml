@@ -42,6 +42,12 @@
     dest: /home/pi/node_programs/root/sensor/dht.py
     mode: 0755
 
+- name: New node project
+  copy:
+    src: ../files/package.json
+    dest: /home/pi/node_programs/root/sensor/package.json
+    mode: 0755
+
 - name: npm install
   command: npm install --save
   args:
@@ -57,12 +63,6 @@
     creates: /home/pi/node_programs/root/sensor/node_modules/node-dht-sensor
   become: true
   become_user: root
-
-- name: New node project
-  copy:
-    src: ../files/package.json
-    dest: /home/pi/node_programs/root/sensor/package.json
-    mode: 0755
 
 - name: Copy index.js
   copy:
