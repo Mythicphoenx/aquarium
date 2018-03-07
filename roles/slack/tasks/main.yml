@@ -1,4 +1,6 @@
 ---
+- include_vars: ../vars/vault.yml
+
 - name: Update apt-get cache
   apt: >
     update_cache=yes
@@ -35,6 +37,24 @@
     src: ../files/slack.py
     dest: /home/pi/node_programs/root/slack/slack.py
     mode: 0755
+
+- name: insert secret in /home/pi/node_programs/root/slack/slack.py
+  replace:
+    path: /home/pi/node_programs/root/slack/slack.py
+    regexp: '{{ SlackClient }}'
+    replace: {{ SlackClient }}
+
+- name: Copy slack_del.py
+  copy:
+    src: ../files/slack_del.py
+    dest: /home/pi/node_programs/root/slack/slack_del.py
+    mode: 0755
+
+- name: insert secret in /home/pi/node_programs/root/slack/slack_del.py
+  replace:
+    path: /home/pi/node_programs/root/slack/slack_del.py
+    regexp: '{{ SlackClient }}'
+    replace: {{ SlackClient }}
 
 - name: New node project
   copy:

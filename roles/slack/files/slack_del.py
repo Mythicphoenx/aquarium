@@ -7,7 +7,7 @@ import datetime
 from slackclient import SlackClient
 
 
-slack_client = SlackClient("xoxb-319516430726-YaEsUzRExv3ISk4zQ0fRspYp")
+slack_client = SlackClient("{{SlackClient}}")
 
 # Fetch your Bot's User ID
 user_list = slack_client.api_call("users.list")
