@@ -60,13 +60,11 @@
   become_user: root
 
 - name: npm install handlebars
-  command: npm install handlebars -save -g
+  command: npm install handlebars -save
   args:
     chdir: /home/pi/node_programs/root/
     creates: /home/pi/node_programs/root/node_modules/handlebars
-  become: true
-  become_user: root
-
+  
 - name: Check if node is running
   wait_for:
     port: 80

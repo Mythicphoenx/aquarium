@@ -10,6 +10,8 @@ i=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.
 h=$(hostname)
 
 echo "$i" > ~/.vault_pass.txt
+
+echo "[rpi]" > ~/aquarium/hosts
 echo "$i ansible_connection=ssh ansible_ssh_user=pi ansible_ssh_pass="$1 >> ~/aquarium/hosts
 
 ansible-playbook main.yml ~/.vault_pass.txt
