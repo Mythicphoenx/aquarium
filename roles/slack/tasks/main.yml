@@ -41,8 +41,8 @@
 - name: insert secret in /home/pi/node_programs/root/slack/slack.py
   replace:
     path: /home/pi/node_programs/root/slack/slack.py
-    regexp: '{{ SlackClient }}'
-    replace: {{ SlackClient }}
+    regexp: '{{SlackClient}}'
+    replace: "{{ SlackClient }}"
 
 - name: Copy slack_del.py
   copy:
@@ -53,8 +53,8 @@
 - name: insert secret in /home/pi/node_programs/root/slack/slack_del.py
   replace:
     path: /home/pi/node_programs/root/slack/slack_del.py
-    regexp: '{{ SlackClient }}'
-    replace: {{ SlackClient }}
+    regexp: '{{SlackClient}}'
+    replace: "{{ SlackClient }}"
 
 - name: New node project
   copy:
