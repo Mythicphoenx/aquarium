@@ -98,7 +98,7 @@
   ignore_errors: yes
 
 - name: start Node
-  shell: "forever start /home/pi/node_programs/root/slack/index.js"
+  shell: "forever start /home/pi/node_programs/root/slack/index.js --workingDir /home/pi/node_programs/root/slack"
   args:
     chdir: /home/pi/node_programs/root/slack
   async: 1000

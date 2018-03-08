@@ -24,18 +24,16 @@
   become_user: root
 
 - name: install express --save 
-  command: npm install express --save -g
+  command: npm install express --save
   args:
     chdir: /home/pi/node_programs/root/camera/
     creates: /home/pi/node_programs/root/camera/node_modules/express
-  become: true
-  become_user: root
 
 - name: install socket.io --save 
-  command: npm install socket.io --save -g
+  command: npm install socket.io --save
   args:
     chdir: /home/pi/node_programs/root/camera/
-    creates: /home/pi/node_programs/root/camera/node_modules//socket.io
+    creates: /home/pi/node_programs/root/camera/node_modules/socket.io
   become: true
   become_user: root
 
@@ -67,7 +65,7 @@
   ignore_errors: yes
 
 - name: start Camera
-  shell: "forever start /home/pi/node_programs/root/camera/index.js"
+  shell: "forever start /home/pi/node_programs/root/camera/index.js --workingDir /home/pi/node_programs/root/camera"
   args:
     chdir: /home/pi/node_programs/root/camera
   async: 1000

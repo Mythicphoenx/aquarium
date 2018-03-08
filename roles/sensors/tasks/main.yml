@@ -87,11 +87,11 @@
   become: true
   become_user: root
 
-- name: npm install node-dht-sensor request --save -g
+- name: npm install node-dht-sensor request --save
   command: npm install node-dht-sensor request --save
   args:
     chdir: /home/pi/node_programs/root/sensor/
-    creates: /usr/local/lib/node_modules/node-dht-sensor
+    creates: /home/pi/node_programs/root/sensor/node_modules/node-dht-sensor
   become: true
   become_user: root
 
@@ -117,7 +117,7 @@
   ignore_errors: yes
 
 - name: start Node
-  shell: "forever start /home/pi/node_programs/root/sensor/index.js"
+  shell: "forever start /home/pi/node_programs/root/sensor/index.js --workingDir /home/pi/node_programs/root/sensor"
   args:
     chdir: /home/pi/node_programs/root/sensor
   async: 1000
