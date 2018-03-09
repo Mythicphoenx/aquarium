@@ -64,7 +64,7 @@
   command: npm install handlebars -save
   args:
     chdir: /home/pi/node_programs/root/
-    creates: /usr/local/lib/node_modules/handlebars
+    creates: /home/pi/node_programs/node_modules/handlebars
   
 - name: Check if node is running
   wait_for:

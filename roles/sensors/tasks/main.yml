@@ -73,11 +73,19 @@
     dest: /home/pi/node_programs/root/sensor/package.json
     mode: 0755
 
-- name: npm install
-  command: npm install --save
+- name: install express --save
+  command: npm install express --save
   args:
     chdir: /home/pi/node_programs/root/sensor/
-    creates: /home/pi/node_programs/root/sensor/node_modules
+    creates: /home/pi/node_programs/root/sensor/node_modules/express
+
+- name: install socket.io --save
+  command: npm install socket.io --save
+  args:
+    chdir: /home/pi/node_programs/root/sensor/
+    creates: /home/pi/node_programs/root/sensor/node_modules/socket.io
+  become: true
+  become_user: root
 
 - name: npm install forever
   command: npm install forever -g
