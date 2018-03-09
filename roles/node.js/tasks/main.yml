@@ -1,6 +1,7 @@
 - name: Update apt-get cache
   apt: >
     update_cache=yes
+    cache_valid_time=3600
   become: true
   become_user: root
 
@@ -48,8 +49,8 @@
 - name: npm install express
   command: npm install express --save
   args:
-    chdir: /home/pi/node_programs/root/
-    creates: /home/pi/node_programs/root/node_modules/express
+    chdir: /home/pi/node_programs
+    creates: /home/pi/node_programs/node_modules/express
 
 - name: npm install forever
   command: npm install forever -g 
@@ -63,7 +64,7 @@
   command: npm install handlebars -save
   args:
     chdir: /home/pi/node_programs/root/
-    creates: /home/pi/node_programs/root/node_modules/handlebars
+    creates: /usr/local/lib/node_modules/handlebars
   
 - name: Check if node is running
   wait_for:
