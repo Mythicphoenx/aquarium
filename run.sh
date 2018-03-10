@@ -7,10 +7,14 @@ fi
 # Configure IP address in "hosts" file. If you have more than one
 # Raspberry Pi, add more lines and enter details
 #i=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
+ping 192.168.1.1 -c 20
 i=$(arp -na | grep -i b8:27:eb | cut -d" " -f2 | sed 's/(//' | sed 's/)//')
 
-ping $i -c 100
+echo "==$i=="
+ping "$i" -c 20
 #h=$(hostname)
+
+exit 0
 
 echo "$1" > ~/.vault_pass.txt
 
