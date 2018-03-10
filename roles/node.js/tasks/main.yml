@@ -92,9 +92,9 @@
   become: true
   become_user: root
 
-- name: pm2 startup systemd -u
-  shell: "pm2 startup systemd -u pi"
+- name: pm2 startup
+  shell: "env PATH=$PATH:/usr/bin pm2 startup systemd -u pi --hp /home/pi"
   args:
-    creates: /home/pi/node_programs/
+    creates: /etc/systemd/system/multi-user.target.wants/pm2-pi.service
   become: true
   become_user: root
