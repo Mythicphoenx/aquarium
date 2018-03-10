@@ -106,3 +106,9 @@
   become: true
   become_user: root
 
+- name: pm2 save
+  shell: "pm2 save"
+  args:
+    creates: /home/pi/node_programs/
+  become: true
+  become_user: root
