@@ -99,13 +99,11 @@
   become: true
   become_user: root
 
-- name: npm install node-dht-sensor request --save
-  command: npm install node-dht-sensor request --save
+- name: npm install node-dht-sensor --save
+  command: npm install node-dht-sensor --save
   args:
     chdir: /home/pi/node_programs/root/sensor/
     creates: /home/pi/node_programs/root/sensor/node_modules/node-dht-sensor
-  become: true
-  become_user: root
 
 - name: Copy index.js
   copy:
