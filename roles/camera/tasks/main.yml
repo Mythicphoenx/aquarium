@@ -34,8 +34,6 @@
   args:
     chdir: /home/pi/node_programs/root/camera/
     creates: /home/pi/node_programs/root/camera/node_modules/socket.io
-  become: true
-  become_user: root
 
 - name: Copy index.js
   copy:

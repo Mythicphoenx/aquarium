@@ -12,9 +12,9 @@ h=$(hostname)
 echo "$1" > ~/.vault_pass.txt
 
 echo "[rpi]" > ~/aquarium/hosts
-echo "$i ansible_connection=ssh ansible_ssh_user=pi ansible_ssh_pass="$1 --vault-password-file ~/.vault_pass.txt >> ~/aquarium/hosts
+echo "$i ansible_connection=ssh ansible_ssh_user=pi ansible_ssh_pass="$1 >> ~/aquarium/hosts
 
-ansible-playbook main.yml ~/.vault_pass.txt
+ansible-playbook main.yml --vault-password-file ~/.vault_pass.txt
 
 rm /home/pi/aquarium/hosts 2>/dev/null
 rm /home/pi/aquarium/main.retry 2>/dev/null

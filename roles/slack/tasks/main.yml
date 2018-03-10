@@ -14,15 +14,14 @@
     update_cache=yes
     state=latest
   with_items:
-  - pip
+  - python3-pip
   become: true
   become_user: root
 
-- name: install pip packages
-  pip:
-    name="{{item}}"    
-  with_items:
-  - psutil
+- name: pip3 install psutil
+  command: pip3 install psutil
+  args:
+    creates: /usr/local/lib/python3.5/dist-packages/psutil
   become: true
   become_user: root
 

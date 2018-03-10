@@ -84,8 +84,12 @@
   args:
     chdir: /home/pi/node_programs/root/sensor/
     creates: /home/pi/node_programs/root/sensor/node_modules/socket.io
-  become: true
-  become_user: root
+
+- name: install request --save
+  command: npm install request --save
+  args:
+    chdir: /home/pi/node_programs/root/sensor/
+    creates: /home/pi/node_programs/root/sensor/node_modules/request
 
 - name: npm install forever
   command: npm install forever -g
