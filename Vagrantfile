@@ -34,6 +34,7 @@ sudo iptables -t mangle -F
 sudo iptables -t mangle -X
 
 su -c "git clone https://github.com/Revenberg/aquarium.git" vagrant
-
+touch ~/.vault_pass.txt
+ 
     SHELL
  end
