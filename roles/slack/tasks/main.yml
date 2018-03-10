@@ -61,11 +61,11 @@
     dest: /home/pi/node_programs/root/slack/package.json
     mode: 0755
 
-- name: npm install forever
-  command: npm install forever -g
+- name: npm install pm2
+  command: npm install pm2 -g
   args:
     chdir: /home/pi/node_programs/root/
-    creates: /usr/local/lib/node_modules/forever
+    creates: /usr/local/lib/node_modules/pm2
   become: true
   become_user: root
 
@@ -97,7 +97,7 @@
   ignore_errors: yes
 
 - name: start Node
-  shell: "forever start /home/pi/node_programs/root/slack/index.js --workingDir /home/pi/node_programs/root/slack"
+  shell: "pm2 start /home/pi/node_programs/root/slack/index.js"
   args:
     chdir: /home/pi/node_programs/root/slack
   async: 1000

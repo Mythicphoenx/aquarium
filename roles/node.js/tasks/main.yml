@@ -52,11 +52,11 @@
     chdir: /home/pi/node_programs
     creates: /home/pi/node_programs/node_modules/express
 
-- name: npm install forever
-  command: npm install forever -g 
+- name: npm install pm2
+  command: npm install pm2 -g 
   args:
     chdir: /home/pi/node_programs/root/
-    creates: /usr/local/lib/node_modules/forever
+    creates: /usr/local/lib/node_modules/pm2
   become: true
   become_user: root
 
@@ -76,7 +76,7 @@
   ignore_errors: yes
 
 - name: start Node
-  shell: "forever start /home/pi/node_programs/index.js --workingDir /home/pi/node_programs/"
+  shell: "pm2 start /home/pi/node_programs/index.js "
   args:
     chdir: /home/pi/node_programs/
   async: 1000

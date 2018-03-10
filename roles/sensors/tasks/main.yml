@@ -91,11 +91,11 @@
     chdir: /home/pi/node_programs/root/sensor/
     creates: /home/pi/node_programs/root/sensor/node_modules/request
 
-- name: npm install forever
-  command: npm install forever -g
+- name: npm install pm2
+  command: npm install pm2 -g
   args:
     chdir: /home/pi/node_programs/root/
-    creates: /usr/local/lib/node_modules/forever
+    creates: /usr/local/lib/node_modules/pm2
   become: true
   become_user: root
 
@@ -127,7 +127,7 @@
   ignore_errors: yes
 
 - name: start Node
-  shell: "forever start /home/pi/node_programs/root/sensor/index.js --workingDir /home/pi/node_programs/root/sensor"
+  shell: "pm2 start /home/pi/node_programs/root/sensor/index.js "
   args:
     chdir: /home/pi/node_programs/root/sensor
   async: 1000
