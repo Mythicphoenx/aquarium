@@ -33,7 +33,7 @@ sudo iptables -t nat -X
 sudo iptables -t mangle -F
 sudo iptables -t mangle -X
 
-git clone https://github.com/Revenberg/aquarium.git
+su -c "git clone https://github.com/Revenberg/aquarium.git" vagrant
 
     SHELL
  end
