@@ -85,16 +85,21 @@
   become: true
   become_user: root
 
-- name: pm2 save
-  shell: "pm2 save"
-  args:
-    creates: /home/pi/node_programs/
-  become: true
-  become_user: root
-
 - name: pm2 startup
   shell: "env PATH=$PATH:/usr/bin pm2 startup systemd -u pi --hp /home/pi"
   args:
     creates: /etc/systemd/system/multi-user.target.wants/pm2-pi.service
+  become: true
+  become_user: root
+
+- name: pm2 save
+  shell: "pm2 save"
+  become: true
+  become_user: root
+
+- name: add pm2 startup to crontab
+  lineinfile:
+    path: /var/spool/cron/crontabs/root
+    line: '@reboot pm2 resurrect'
   become: true
   become_user: root
